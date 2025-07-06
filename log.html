@@ -1,0 +1,144 @@
+<?php
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET");
+
+// Логирование ошибок в файл
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/tracking_errors.log');
+
+// Часовой пояс для Москвы
+date_default_timezone_set('Europe/Moscow');
+
+// Конфигурация БД
+$dbConfig = [
+    'host' => 'sql302.infinityfree.com',
+    'username' => 'epiz_33082168',
+    'password' => 'A5E7cX5ASgr2',
+    'database' => 'epiz_33082168_accounts',
+    'charset' => 'utf8mb4'
+];
+
+// Получение реального IP клиента
+function getRealIpAddr() {
+    if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        foreach (explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']) as $ip) {
+            $ip = trim($ip);
+            if (filter_var($ip, FILTER_VALIDATE_IP)) return $ip;
+        }
+    }
+    if (!empty($_SERVER['HTTP_CLIENT_IP']) && filter_var($_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP)) {
+        return $_SERVER['HTTP_CLIENT_IP'];
+    }
+    return $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+}
+
+// Безопасное получение параметра из GET с ограничением длины
+function getCleanParam(string $name, $default = null, ?int $maxLength = null) {
+    if (!isset($_GET[$name])) return $default;
+    $value = $_GET[$name];
+    if ($maxLength !== null) $value = substr($value, 0, $maxLength);
+    return $value;
+}
+
+try {
+    // Подключение к БД через PDO
+    $db = new PDO(
+        "mysql:host={$dbConfig['host']};dbname={$dbConfig['database']};charset={$dbConfig['charset']}",
+        $dbConfig['username'],
+        $dbConfig['password'],
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::ATTR_TIMEOUT => 5,
+        ]
+    );
+
+    // Установка часового пояса в MySQL-сессии
+    $db->exec("SET time_zone = '+03:00';");
+
+    $now = new DateTime('now', new DateTimeZone('Europe/Moscow'));
+
+    // Сбор данных
+    $data = [
+        'current_time'   => $now->format('Y-m-d H:i:s'),
+        'real_ip'        => getRealIpAddr(),
+        'forwarded_ip'   => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? null,
+        'user_agent'     => substr($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown', 0, 500),
+        'referrer'       => getCleanParam('ref', $_SERVER['HTTP_REFERER'] ?? null, 500),
+        'screen_width'   => (int)getCleanParam('sw', 0),
+        'screen_height'  => (int)getCleanParam('sh', 0),
+        'gpu_name'       => getCleanParam('gpu', 'unknown', 255),
+        'cpu_cores'      => (int)getCleanParam('cpu', 0),
+        'load_time_ms'   => (int)((float)getCleanParam('lt', 0) * 1000),
+        'network_type'   => getCleanParam('et', 'unknown', 20),
+    ];
+
+    // Анализ user agent
+    $ua = strtolower($data['user_agent']);
+    $data['device_type'] = 'desktop';
+    $data['browser_name'] = 'Unknown';
+    $data['os_name'] = 'Unknown';
+
+    if (strpos($ua, 'mobile') !== false) $data['device_type'] = 'mobile';
+    elseif (strpos($ua, 'tablet') !== false) $data['device_type'] = 'tablet';
+    elseif (strpos($ua, 'bot') !== false) $data['device_type'] = 'bot';
+
+    if (strpos($ua, 'chrome') !== false) $data['browser_name'] = 'Chrome';
+    elseif (strpos($ua, 'firefox') !== false) $data['browser_name'] = 'Firefox';
+    elseif (strpos($ua, 'safari') !== false) $data['browser_name'] = 'Safari';
+    elseif (strpos($ua, 'edge') !== false) $data['browser_name'] = 'Edge';
+
+    if (strpos($ua, 'windows') !== false) $data['os_name'] = 'Windows';
+    elseif (strpos($ua, 'mac') !== false) $data['os_name'] = 'MacOS';
+    elseif (strpos($ua, 'linux') !== false) $data['os_name'] = 'Linux';
+    elseif (strpos($ua, 'android') !== false) $data['os_name'] = 'Android';
+    elseif (strpos($ua, 'iphone') !== false) $data['os_name'] = 'iOS';
+
+    // Вставка в БД
+    $stmt = $db->prepare("
+        INSERT INTO visitor_logs (
+            created_at, real_ip, forwarded_ip, user_agent, referrer,
+            screen_width, screen_height, device_type,
+            browser_name, os_name, network_type,
+            gpu_name, cpu_cores, load_time_ms
+        ) VALUES (
+            :current_time, :real_ip, :forwarded_ip, :user_agent, :referrer,
+            :screen_width, :screen_height, :device_type,
+            :browser_name, :os_name, :network_type,
+            :gpu_name, :cpu_cores, :load_time_ms
+        )
+    ");
+
+    $stmt->execute($data);
+
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'Logged successfully',
+        'server_time' => $data['current_time'],
+        'php_timezone' => date_default_timezone_get(),
+        'timezone' => 'Europe/Moscow (UTC+3)',
+    ]);
+
+} catch (PDOException $e) {
+    error_log("DB Error: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Database error',
+        'error' => $e->getMessage(),
+        'server_time' => (new DateTime('now', new DateTimeZone('Europe/Moscow')))->format('H:i:s d-m-Y'),
+        'timezone' => 'Europe/Moscow (UTC+3)',
+    ]);
+} catch (Exception $e) {
+    error_log("Error: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'System error',
+        'server_time' => (new DateTime('now', new DateTimeZone('Europe/Moscow')))->format('H:i:s d-m-Y'),
+        'timezone' => 'Europe/Moscow (UTC+3)',
+    ]);
+}
