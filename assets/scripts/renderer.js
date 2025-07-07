@@ -1,3 +1,5 @@
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 const Renderer = {
   info_elem: document.getElementById("renderer-info"),
   status_elem: document.getElementById("renderer-status"),
@@ -27,6 +29,11 @@ const Renderer = {
   mouse: { x: window.innerWidth / 2, y: window.innerHeight / 2 }, // Центр экрана по умолчанию
   
   init: function() {
+    if (isMobile) {
+      this.particles_per_second = 10;
+      this.particle_size = 5;
+      this.particle_lifetime = 1.5;
+    }
     this.ctx = this.canvas.getContext("2d");
     this.resize();
     

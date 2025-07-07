@@ -6,7 +6,6 @@ function isInternetExplorer() {
 // Обработчик для запрета контекстного меню
 function handleContextMenu(e) {
   if (isInternetExplorer()) {
-    console.log('Context menu is disabled');
   }
   e.preventDefault();
   return false;
@@ -18,12 +17,10 @@ function handleDragStart(e) {
   return false;
 }
 
-// Обработчик для запрета средней кнопки мыши
+// Обновим функцию для мобильных
 function handleMiddleClick(e) {
-  if (e.button === 1) { // 1 - средняя кнопка мыши
-    console.log('Middle mouse click is disabled');
+  if (e.button === 1 || e.touches?.length > 1) {
     e.preventDefault();
-    return false;
   }
 }
 

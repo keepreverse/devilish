@@ -5,8 +5,13 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>
+    document.documentElement.classList.add(
+      'ontouchstart' in window || navigator.maxTouchPoints > 0 
+        ? 'touch-device' : 'non-touch-device'
+    );
+  </script>
   <title>reversE | Devilish Page</title>
   <meta name="theme-color" content="#ff0000" />
   <meta property="og:title" content="reversE's Devilish Web" />
@@ -22,141 +27,143 @@
 </head>
 
 <body>
-  <div class="debug">
-    <div id="renderer-info" aria-hidden="true"></div>
-    <div id="renderer-status" aria-hidden="true"></div>
-  </div>
-
-  <canvas id="canvas-background" aria-hidden="true"></canvas>
-
-  <video
-    id="background-video"
-    src="assets/music/hp.mp4"
-    playsinline
-    muted
-  ></video>
-
-  <div id="preloader" class="visible" aria-label="Loading content">
-    <div id="loader"></div>
-  </div>
-
-  <div class="music-container">
-    <div class="music-prompt" id="music-prompt">
-      <span class="levitating">*click on me*</span>
+  <div id="content-wrapper">
+    <div class="debug">
+      <div id="renderer-info" aria-hidden="true"></div>
+      <div id="renderer-status" aria-hidden="true"></div>
     </div>
-    <div class="music-controls" id="music-controls">
-      <div class="controls-row">
-        <button class="play-pause-btn" id="play-pause-btn">▶</button>
-        <input
-          type="range"
-          class="volume-slider"
-          id="volume-slider"
-          min="0"
-          max="0.6"
-          step="0.01"
-          value="0.3"
-        />
-      </div>
 
-      <div class="progress-container">
-        <input
-          type="range"
-          class="progress-slider"
-          id="progress-slider"
-          min="0"
-          max="100"
-          step="0.1"
-          value="0"
-        />
-        <div class="time-display">
-          <span id="current-time">0:00</span>
-          <span id="duration">0:00</span>
+    <canvas id="canvas-background" aria-hidden="true"></canvas>
+
+    <video
+      id="background-video"
+      src="assets/music/hp.mp4"
+      playsinline
+      muted
+    ></video>
+
+    <div id="preloader" class="visible" aria-label="Loading content">
+      <div id="loader"></div>
+    </div>
+
+    <div class="music-container">
+      <div class="music-prompt" id="music-prompt">
+        <span class="levitating">*click on me*</span>
+      </div>
+      <div class="music-controls" id="music-controls">
+        <div class="controls-row">
+          <button class="play-pause-btn" id="play-pause-btn">▶</button>
+          <input
+            type="range"
+            class="volume-slider"
+            id="volume-slider"
+            min="0"
+            max="0.6"
+            step="0.01"
+            value="0.3"
+          />
+        </div>
+
+        <div class="progress-container">
+          <input
+            type="range"
+            class="progress-slider"
+            id="progress-slider"
+            min="0"
+            max="100"
+            step="0.1"
+            value="0"
+          />
+          <div class="time-display">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+          </div>
         </div>
       </div>
     </div>
+
+    <main class="container">
+      <header class="header">
+        <img src="assets/images/pic.png" alt="Profile picture" />
+        <div class="name">
+          <h1>reversE</h1>
+          <p class="nickname">workin' on dying</p>
+        </div>
+      </header>
+
+      <section class="content" aria-label="Social links">
+        <div class="links">
+          <a
+            href="https://youtube.com/c/viowo"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+            ><img src="assets/images/icons/youtube.png" alt="YouTube icon"
+          /></a>
+          <a
+            href="https://steamcommunity.com/profiles/76561198441411688"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Steam"
+            ><img src="assets/images/icons/steam.png" alt="Steam icon"
+          /></a>
+          <a
+            href="https://github.com/keepreverse"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            ><img src="assets/images/icons/github.png" alt="GitHub icon"
+          /></a>
+          <a
+            href="https://open.spotify.com/user/wj9qgsy81spwoykpycxt281ca?si=f78c454a54a24ae0"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Spotify"
+            ><img src="assets/images/icons/spotify.png" alt="Spotify icon"
+          /></a>
+          <a
+            href="https://discordapp.com/users/355762117951094784"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Discord"
+            ><img src="assets/images/icons/discord.png" alt="Discord icon"
+          /></a>
+        </div>
+      </section>
+    </main>
+
+    <!-- Скрипты без версии -->
+    <script src="assets/scripts/pointer.js"></script>
+    <script src="assets/scripts/show.js"></script>
+    <script src="assets/scripts/touch.js"></script>
+    <script src="assets/scripts/track.js"></script>
+    <script src="assets/scripts/player.js"></script>
+    <script src="assets/scripts/shapes.js"></script>
+    <script src="assets/scripts/particle.js"></script>
+    <script src="assets/scripts/renderer.js"></script>
+    <script src="assets/scripts/events.js"></script>
+    <script src="assets/scripts/focus.js"></script>
+
+    <!-- Автоматическое добавление версии для сброса кеша -->
+    <script>
+      (function () {
+        const version = Date.now();
+
+        // Обновляем href у стилей
+        const styleLink = document.getElementById("styles-css");
+        if (styleLink) {
+          styleLink.href = styleLink.href + "?v=" + version;
+        }
+
+        // Обновляем src у скриптов
+        const scripts = document.querySelectorAll(
+          'script[src^="assets/scripts/"]'
+        );
+        scripts.forEach((s) => {
+          s.src = s.src + "?v=" + version;
+        });
+      })();
+    </script>
   </div>
-
-  <main class="container">
-    <header class="header">
-      <img src="assets/images/pic.png" alt="Profile picture" />
-      <div class="name">
-        <h1>reversE</h1>
-        <p class="nickname">workin' on dying</p>
-      </div>
-    </header>
-
-    <section class="content" aria-label="Social links">
-      <div class="links">
-        <a
-          href="https://youtube.com/c/viowo"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="YouTube"
-          ><img src="assets/images/icons/youtube.png" alt="YouTube icon"
-        /></a>
-        <a
-          href="https://steamcommunity.com/profiles/76561198441411688"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Steam"
-          ><img src="assets/images/icons/steam.png" alt="Steam icon"
-        /></a>
-        <a
-          href="https://github.com/keepreverse"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="GitHub"
-          ><img src="assets/images/icons/github.png" alt="GitHub icon"
-        /></a>
-        <a
-          href="https://open.spotify.com/user/wj9qgsy81spwoykpycxt281ca?si=f78c454a54a24ae0"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Spotify"
-          ><img src="assets/images/icons/spotify.png" alt="Spotify icon"
-        /></a>
-        <a
-          href="https://discordapp.com/users/355762117951094784"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Discord"
-          ><img src="assets/images/icons/discord.png" alt="Discord icon"
-        /></a>
-      </div>
-    </section>
-  </main>
-
-  <!-- Скрипты без версии -->
-  <script src="assets/scripts/pointer.js"></script>
-  <script src="assets/scripts/show.js"></script>
-  <script src="assets/scripts/touch.js"></script>
-  <script src="assets/scripts/track.js"></script>
-  <script src="assets/scripts/player.js"></script>
-  <script src="assets/scripts/shapes.js"></script>
-  <script src="assets/scripts/particle.js"></script>
-  <script src="assets/scripts/renderer.js"></script>
-  <script src="assets/scripts/events.js"></script>
-  <script src="assets/scripts/focus.js"></script>
-
-  <!-- Автоматическое добавление версии для сброса кеша -->
-  <script>
-    (function () {
-      const version = Date.now();
-
-      // Обновляем href у стилей
-      const styleLink = document.getElementById("styles-css");
-      if (styleLink) {
-        styleLink.href = styleLink.href + "?v=" + version;
-      }
-
-      // Обновляем src у скриптов
-      const scripts = document.querySelectorAll(
-        'script[src^="assets/scripts/"]'
-      );
-      scripts.forEach((s) => {
-        s.src = s.src + "?v=" + version;
-      });
-    })();
-  </script>
 </body>
 </html>

@@ -4,6 +4,16 @@ const preloaderConfig = {
   fadeOutDuration: 300 // Длительность анимации исчезновения (мс)
 };
 
+
+// Оптимизация прелоадера для медленных соединений
+const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+if (connection) {
+  if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+    preloaderConfig.minShowTime = 1500;
+  }
+}
+
 // Элемент прелоадера (кэшируем для производительности)
 const preloader = document.getElementById('preloader');
 
