@@ -34,20 +34,16 @@ class Particle {
 
   animate(dt, mx, my, sw, sh) {
     this.i += dt;
-
-    if (window.innerWidth < 768) {
-
-      this.x += dt * ((mx - sw / 2) * this.velx) * 0.3;
-      this.y += dt * ((my - sh / 2) * this.vely) * 0.3;
-
-    } else {
-
-    this.x += dt * ((mx - sw / 2) * this.velx) * (this.size - this.max_size / 2);
-    this.y += dt * ((my - sh / 2) * this.vely) * (this.size - this.max_size / 2);
-  
-   }
+    
+    // Увеличим чувствительность на мобильных
+    const mobileFactor = window.innerWidth < 768 ? 0.7 : 0.3;
+    
+    this.x += dt * ((mx - sw / 2) * this.velx) * 
+      (this.size - this.max_size / 2) * mobileFactor;
+      
+    this.y += dt * ((my - sh / 2) * this.vely) * 
+      (this.size - this.max_size / 2) * mobileFactor;
   }
-
 
 
   draw(c) {

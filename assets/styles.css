@@ -416,6 +416,7 @@ input:focus-visible,
 
 .play-pause-btn {
     -webkit-appearance: none;
+    appearance: none;
     background: none;
     border: none;
     color: #ff5555;
@@ -431,7 +432,6 @@ input:focus-visible,
 }
 
 .play-pause-btn.play-icon {
-    -webkit-appearance: none;
     font-size: 18px;
     padding-top: 4px;
     padding-left: 2px;
@@ -439,6 +439,12 @@ input:focus-visible,
 
 .play-pause-btn:hover {
     color: #ff0000;
+}
+
+/* Фикс для Safari */
+_::-webkit-full-page-media, _:future, :root .play-pause-btn {
+  color: #ff5555 !important;
+  background-image: none !important;
 }
 
 .volume-slider {
@@ -642,8 +648,9 @@ input:focus-visible,
 /* Медиа-запросы для адаптивности */
 @media (max-width: 1024px) {
     .container {
-        top: 45%;
-        max-width: 40%;
+        top: 50%;
+        max-width: 60%;
+        padding: 15px;
     }
 
     .header {
@@ -657,7 +664,7 @@ input:focus-visible,
 
 @media (max-width: 768px) {
     .container {
-        top: 40%;
+        top: 50%;
         max-width: 60%;
         padding: 15px;
     }
@@ -700,8 +707,8 @@ input:focus-visible,
 
 @media (max-width: 480px) {
     .container {
-        top: 40%;
-        max-width: 70%;
+        top: 55%;
+        max-width: 60%;
         padding: 12px;
     }
 
@@ -768,15 +775,9 @@ input:focus-visible,
 
 /* Стили для touch-устройств */
 .touch-device {
-    /* Увеличение зон клика */
-    .content .links a {
-        padding: 10px;
-        display: inline-block;
-    }
-    
     /* Оптимизация музыкального плеера */
     .music-controls {
-        max-width: 90%;
+        max-width: 50%;
     }
     
     .volume-slider,
@@ -798,7 +799,6 @@ input:focus-visible,
         transform: none !important;
         filter: none !important;
         text-shadow: none !important;
-        color: inherit !important;
     }
 }
 
@@ -812,4 +812,9 @@ input:focus-visible,
 
 .touch-device * {
     cursor: default !important;
+}
+
+
+video {
+    -webkit-transform: translateZ(0);
 }

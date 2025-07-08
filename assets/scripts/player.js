@@ -1,3 +1,13 @@
+// В начале файла добавим фикс для iOS
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+if (isIOS) {
+  document.querySelectorAll('video, audio').forEach(media => {
+    media.setAttribute('playsinline', '');
+    media.setAttribute('muted', '');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const music = new Audio('assets/music/hp.mp3');
     const video = document.getElementById('background-video');

@@ -27,12 +27,23 @@ const Renderer = {
   ctx: null,
   particles: [],
   mouse: { x: window.innerWidth / 2, y: window.innerHeight / 2 }, // Центр экрана по умолчанию
-  
+
+
+  touchstart: function(e) {
+    this.mouse.x = e.touches[0].clientX;
+    this.mouse.y = e.touches[0].clientY;
+  },
+
+  touchmove: function(e) {
+    this.mouse.x = e.touches[0].clientX;
+    this.mouse.y = e.touches[0].clientY;
+  },
+
   init: function() {
     if (isMobile) {
-      this.particles_per_second = 10;
-      this.particle_size = 5;
-      this.particle_lifetime = 1.5;
+      this.particles_per_second = 15;
+      this.particle_speed = 0.6;
+      this.particle_size = 8;
     }
     this.ctx = this.canvas.getContext("2d");
     this.resize();
@@ -48,6 +59,9 @@ const Renderer = {
     window.mousemove = this.mousemove.bind(this);
     window.keydown = this.keydown.bind(this);
     
+    document.addEventListener('touchstart', this.touchstart.bind(this));
+    document.addEventListener('touchmove', this.touchmove.bind(this));
+   
     this.main();
   },
   
