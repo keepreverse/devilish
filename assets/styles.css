@@ -172,7 +172,7 @@ p.nickname {
     max-width: 300px;
     width: 90%;
     text-align: center;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
@@ -379,7 +379,7 @@ input:focus-visible,
     transform: translateY(-10px);
     pointer-events: none;
     transition: opacity 0.5s ease, transform 0.5s ease;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.3);
     padding: 10px 20px;
     border-radius: 30px;
     margin: 0 auto;
@@ -427,14 +427,39 @@ input:focus-visible,
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 4px;
-    transition: transform 0.3s;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
 }
 
-.play-pause-btn.play-icon {
-    font-size: 18px;
-    padding-top: 4px;
-    padding-left: 2px;
+.play-pause-btn::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 0 8px 16px;
+    border-color: transparent transparent transparent currentColor;
+    left: 50%;
+    top: 50%;
+    transform: translate(-35%, -50%);
+    transition: all 0.3s ease;
+}
+
+.play-pause-btn.pause-icon::before {
+    width: 18px;
+    height: 20px;
+    border: none;
+    background: 
+        linear-gradient(to right, currentColor 0%, currentColor 30%, transparent 30%, transparent 70%, currentColor 70%, currentColor 100%),
+        linear-gradient(to right, currentColor 0%, currentColor 30%, transparent 30%, transparent 70%, currentColor 70%, currentColor 100%);
+    background-size: 6px 100%;
+    background-repeat: no-repeat;
+    background-position: 
+        left center,
+        right center;
+    transform: translate(-50%, -50%);
 }
 
 .play-pause-btn:hover {
