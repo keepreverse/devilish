@@ -13,6 +13,11 @@ body {
     background-size: 100% 100%;
     overflow-x: hidden;
     min-height: 100vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .debug {
@@ -164,13 +169,7 @@ p.nickname {
 }
 
 .container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 300px;
-    width: 90%;
-    text-align: center;
+    display: flex;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 15px;
     padding: 20px;
@@ -178,6 +177,17 @@ p.nickname {
     backdrop-filter: blur(2px);
     border: 2px solid rgba(255, 0, 0, 0.2);
     animation: containerGlow 4s infinite ease-in-out;
+    min-width: 250px;
+    max-width: 98vw;
+    margin-top: 30vh;
+    margin-bottom: 4vh;
+    text-align: left;
+    position: static;
+    justify-content: center;
+    align-items: center;
+    align-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: column;
 }
 
 @keyframes containerGlow {
@@ -261,16 +271,15 @@ p.nickname {
 
 .content a:hover {
     color: #ff0000;
-    text-shadow: 0 0 15px #ff0000;
-    transform: scale(1.15) translateY(-3px);
 }
 
 .content .links img {
+    filter: brightness(0) saturate(100%) invert(15%) sepia(100%) saturate(3500%) hue-rotate(-7deg) brightness(60%) contrast(110%) drop-shadow(0 0 4px #ff222270);
+    transition: filter 0.3s, transform 0.3s ease-out;
+    will-change: transform;
     width: 30px;
     margin: 0 8px;
-    filter: drop-shadow(0 0 5px #ff00007c) brightness(1.2);
-    transition: all 0.3s ease;
-    animation: floatIcons 4s ease-in-out infinite;
+    transform: translateY(0);
 }
 
 @keyframes floatIcons {
@@ -279,9 +288,8 @@ p.nickname {
 }
 
 .content .links img:hover {
-    filter: drop-shadow(0 0 10px #ff00007c) brightness(1.4);
+    filter: brightness(0) saturate(100%) invert(15%) sepia(100%) saturate(3500%) hue-rotate(-7deg) brightness(80%) contrast(120%) drop-shadow(0 0 6px #ff2222bb);
     transform: scale(1.1) translateY(-3px);
-    animation: none;
 }
 
 .footer {
@@ -314,42 +322,50 @@ p.nickname {
 /* Медиа-запросы для адаптивности */
 @media (max-width: 768px) {
     .container {
-        max-width: 90%;
-        padding: 15px;
+        padding: 2.5vh 2vw;
+        min-width: 180px;
+        max-width: 98vw;
     }
 
     .header img {
-        width: 50px;
-        height: 50px;
+        width: 7vh;
+        height: 7vh;
     }
 
     .name h1 {
-        font-size: 28px;
+        font-size: 4.5vh;
     }
 
     .content .links img {
-        width: 25px;
-        margin: 0 8px;
+        width: 4vh;
+        margin: 0 1vw;
+    }
+    .content a {
+        font-size: 2.2vh;
     }
 }
 
 @media (max-width: 480px) {
+    .container {
+        max-width: 92vw;
+        min-width: 220px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 2vh 2vw;
+    }
     .header img {
-        width: 40px;
-        height: 40px;
+        width: 5vh;
+        height: 5vh;
     }
-
     .name h1 {
-        font-size: 24px;
+        font-size: 3vh;
     }
-
     .content .links img {
-        width: 20px;
-        margin: 0 5px;
+        width: 3vh;
+        margin: 0 0.7vw;
     }
-    
     .content a {
-        font-size: 16px;
+        font-size: 1.7vh;
     }
 }
 
@@ -374,13 +390,12 @@ input:focus-visible,
 
 .music-container {
     position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%);
     text-align: center;
     z-index: 100;
     width: 100%;
     max-width: 500px;
+    margin-top: 10vh;
+    margin-bottom: 2vh;
 }
 
 .music-prompt {

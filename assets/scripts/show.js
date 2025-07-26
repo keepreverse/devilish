@@ -59,3 +59,65 @@ window.addEventListener('load', () => {
 // Запасной вариант: скрыть прелоадер через максимальное время
 const maxLoadTime = 5000; // 5 секунд максимум
 setTimeout(hidePreloader, maxLoadTime);
+
+// Парящая анимация для иконок
+// (реализация по предложению пользователя)
+document.addEventListener('DOMContentLoaded', () => {
+    const icons = document.querySelectorAll('.content .links img');
+    const amplitude = 5; // px
+    const period = 4000; // ms
+    const scaleHover = 1.1;
+    const scaleSpeed = 0.12;
+    const yLerpSpeed = 0.12;
+
+    icons.forEach(icon => {
+        let scale = 1;
+        let targetScale = 1;
+        let start = performance.now() * Math.random();
+        let hover = false;
+        let frozenY = 0;
+        let y = 0;
+        let t = 0;
+        let lerpBack = false;
+
+        function animate(now) {
+            if (!hover && !lerpBack) {
+                t = ((now + start) % period) / period;
+                y = Math.sin(t * 2 * Math.PI) * amplitude;
+            }
+            
+            scale += (targetScale - scale) * scaleSpeed;
+            
+            if (lerpBack) {
+                t = ((now + start) % period) / period;
+                const targetY = Math.sin(t * 2 * Math.PI) * amplitude;
+                y += (targetY - y) * yLerpSpeed;
+                if (Math.abs(targetY - y) < 0.2) {
+                    lerpBack = false;
+                }
+            }
+            
+            if (!hover) {
+                icon.style.transform = `translateY(${y}px) scale(${scale})`;
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        animate(performance.now());
+
+        icon.addEventListener('mouseenter', () => {
+            hover = true;
+            targetScale = scaleHover;
+            const now = performance.now();
+            t = ((now + start) % period) / period;
+            frozenY = Math.sin(t * 2 * Math.PI) * amplitude;
+            icon.style.transform = `translateY(${frozenY}px) scale(${scaleHover})`;
+        });
+
+        icon.addEventListener('mouseleave', () => {
+            hover = false;
+            targetScale = 1;
+            lerpBack = true;
+        });
+    });
+});
