@@ -1,3 +1,13 @@
+// В начале файла добавим фикс для iOS
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+if (isIOS) {
+  document.querySelectorAll('video, audio').forEach(media => {
+    media.setAttribute('playsinline', '');
+    media.setAttribute('muted', '');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const music = new Audio('assets/music/hp.mp3');
     const video = document.getElementById('background-video');
@@ -91,7 +101,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!isPlaying) {
             showAndPlayMedia();
             isPlaying = true;
-            playPauseBtn.textContent = '⏸';
             playPauseBtn.classList.remove('play-icon');
             playPauseBtn.classList.add('pause-icon');
         }
@@ -101,7 +110,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (music.paused) {
             music.play()
                 .then(() => {
-                    playPauseBtn.textContent = '⏸';
                     playPauseBtn.classList.remove('play-icon');
                     playPauseBtn.classList.add('pause-icon');
 
@@ -142,7 +150,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     music.addEventListener('play', () => {
-        playPauseBtn.textContent = '⏸';
         playPauseBtn.classList.remove('play-icon');
         playPauseBtn.classList.add('pause-icon');
         isPlaying = true;
@@ -150,13 +157,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     music.addEventListener('pause', () => {
-        playPauseBtn.textContent = '▶';
         playPauseBtn.classList.remove('pause-icon');
         playPauseBtn.classList.add('play-icon');
         isPlaying = false;
         video.pause();
         videoPlayPromise = null;
     });
+
+    // Инициализация при загрузке
+    playPauseBtn.classList.add('play-icon');
 
     music.addEventListener('loadedmetadata', () => {
         durationDisplay.textContent = formatTime(music.duration);

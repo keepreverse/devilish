@@ -42,8 +42,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: fill;
+    object-fit: cover;
     z-index: -3;
+    filter: brightness(1.3) contrast(0.9) saturate(0.9) blur(4px);
     display: none;
 }
 
@@ -169,25 +170,19 @@ p.nickname {
 }
 
 .container {
+    position: fixed; /* Фиксируем на viewport */
+    top: 50%;       /* Сдвигаем вниз на 50% */
+    left: 50%;      /* Сдвигаем вправо на 50% */
+    transform: translate(-50%, -50%); /* Точное центрирование */
     display: flex;
-    background: rgba(0, 0, 0, 0.7);
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
-    backdrop-filter: blur(2px);
-    border: 2px solid rgba(255, 0, 0, 0.2);
-    animation: containerGlow 4s infinite ease-in-out;
     min-width: 250px;
-    max-width: 98vw;
-    margin-top: 30vh;
-    margin-bottom: 4vh;
-    text-align: left;
-    position: static;
-    justify-content: center;
-    align-items: center;
-    align-content: space-around;
-    flex-wrap: wrap;
-    flex-direction: column;
+    max-width: 90vw;
 }
 
 @keyframes containerGlow {
@@ -319,56 +314,6 @@ p.nickname {
     color: inherit;
 }
 
-/* Медиа-запросы для адаптивности */
-@media (max-width: 768px) {
-    .container {
-        padding: 2.5vh 2vw;
-        min-width: 180px;
-        max-width: 98vw;
-    }
-
-    .header img {
-        width: 7vh;
-        height: 7vh;
-    }
-
-    .name h1 {
-        font-size: 4.5vh;
-    }
-
-    .content .links img {
-        width: 4vh;
-        margin: 0 1vw;
-    }
-    .content a {
-        font-size: 2.2vh;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        max-width: 92vw;
-        min-width: 220px;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 2vh 2vw;
-    }
-    .header img {
-        width: 5vh;
-        height: 5vh;
-    }
-    .name h1 {
-        font-size: 3vh;
-    }
-    .content .links img {
-        width: 3vh;
-        margin: 0 0.7vw;
-    }
-    .content a {
-        font-size: 1.7vh;
-    }
-}
-
 
 /* Добавьте это в ваш CSS */
 .no-focus-outline a:focus,
@@ -378,7 +323,6 @@ p.nickname {
     outline: none;
 }
 
-/* Альтернативный стиль для фокуса (по желанию) */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -389,31 +333,40 @@ input:focus-visible,
 }
 
 .music-container {
-    position: absolute;
+    position: fixed; /* Фиксированное позиционирование */
+    left: 50%;      /* Центрирование по горизонтали */
+    transform: translateX(-50%); /* Точное выравнивание */
+    top: 60px;   /* Отступ от нижнего края */
     text-align: center;
     z-index: 100;
     width: 100%;
     max-width: 500px;
-    margin-top: 10vh;
-    margin-bottom: 2vh;
+    padding: 0 20px; /* Защитные отступы по бокам */
+    box-sizing: border-box;
 }
 
 .music-prompt {
-    margin-top: 40px;
     color: #ff4444;
     font-family: comfortaa-medium;
-    padding: 10px 22px;
     border-radius: 30px;
     display: inline-block;
     transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
+    width: 100%;
+    margin: 0; /* Убираем верхний отступ */
+    padding: 10px 0; /* Внутренние отступы вместо margin */
 }
 
-.music-prompt:hover {
-    color: #ff0000;
-    text-shadow: 0 0 20px rgba(255, 0, 0, 1);
-    transform: scale(1.1);
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+    .music-container {
+        max-width: 90vw;
+        bottom: 10px;
+    }
+    
+    .music-prompt {
+        font-size: 14px;
+    }
 }
-
 .levitating {
     display: inline-block;
     text-shadow: 0 0 10px rgba(255, 60, 60, 0.7);
@@ -437,7 +390,7 @@ input:focus-visible,
     transform: translateY(-10px);
     pointer-events: none;
     transition: opacity 0.5s ease, transform 0.5s ease;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.3);
     padding: 10px 20px;
     border-radius: 30px;
     margin: 0 auto;
@@ -451,6 +404,9 @@ input:focus-visible,
 
     display: flex;
     flex-direction: column;
+    position: absolute;
+    left: 0; right: 0;
+    margin: 0 auto;
 }
 
 @keyframes controlsGlow {
@@ -473,6 +429,8 @@ input:focus-visible,
 }
 
 .play-pause-btn {
+    -webkit-appearance: none;
+    appearance: none;
     background: none;
     border: none;
     color: #ff5555;
@@ -483,18 +441,49 @@ input:focus-visible,
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 4px;
-    transition: transform 0.3s;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
 }
 
-.play-pause-btn.play-icon {
-    font-size: 18px;
-    padding-top: 4px;
-    padding-left: 2px;
+.play-pause-btn::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 0 8px 16px;
+    border-color: transparent transparent transparent currentColor;
+    left: 50%;
+    top: 50%;
+    transform: translate(-35%, -50%);
+    transition: all 0.3s ease;
+}
+
+.play-pause-btn.pause-icon::before {
+    width: 18px;
+    height: 20px;
+    border: none;
+    background: 
+        linear-gradient(to right, currentColor 0%, currentColor 30%, transparent 30%, transparent 70%, currentColor 70%, currentColor 100%),
+        linear-gradient(to right, currentColor 0%, currentColor 30%, transparent 30%, transparent 70%, currentColor 70%, currentColor 100%);
+    background-size: 6px 100%;
+    background-repeat: no-repeat;
+    background-position: 
+        left center,
+        right center;
+    transform: translate(-50%, -50%);
 }
 
 .play-pause-btn:hover {
     color: #ff0000;
+}
+
+/* Фикс для Safari */
+_::-webkit-full-page-media, _:future, :root .play-pause-btn {
+  color: #ff5555 !important;
+  background-image: none !important;
 }
 
 .volume-slider {
@@ -560,21 +549,6 @@ input:focus-visible,
     font-family: comfortaa-medium;
     margin-top: 5px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 *, *::before, *::after, head, body {
@@ -707,4 +681,173 @@ input:focus-visible,
         opacity: 0;
         transform: scale(0.5) translate(var(--x), var(--y));
     }
+}
+
+
+/* Медиа-запросы для адаптивности */
+/* Медиа-запросы для адаптивности */
+@media (max-width: 1024px) {
+    .container {
+        transform: translate(-50%, -50%) scale(0.9);
+        max-width: 70%;
+        padding: 18px;
+    }
+
+    .header {
+        gap: 20px;
+    }
+
+    .music-container {
+        bottom: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 80%;
+        padding: 15px;
+        transform: translate(-50%, -50%) scale(0.85);
+    }
+
+    .header img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .name h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .content .links {
+        flex-wrap: wrap;
+    }
+    
+    .content .links img {
+        width: 28px;
+        margin: 5px;
+    }
+
+    .music-container {
+        max-width: 85%;
+        bottom: 25px;
+    }
+    
+    .music-prompt {
+        font-size: 14px;
+    }
+    
+    /* Оптимизация анимаций */
+    body::before,
+    body::after {
+        animation-duration: 30s;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        max-width: 90%;
+        padding: 12px;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    .header {
+        flex-direction: row;
+        gap: 15px;
+    }
+    
+    .header img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .name h1 {
+        font-size: 24px;
+    }
+
+    .content .links {
+        flex-wrap: wrap;
+    }
+
+    .content .links img {
+        width: 28px;
+        margin: 5px;
+    }
+    
+    .music-container {
+        max-width: 90%;
+        bottom: 20px;
+    }
+    
+    .music-prompt {
+        font-size: 12px;
+    }
+    
+    .music-controls {
+        max-width: 160px;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .container {
+        max-width: 95%;
+        transform: translate(-50%, -50%) scale(0.75);
+    }
+    
+    .name h1 {
+        font-size: 20px;
+    }
+    
+    .content .links img {
+        width: 24px;
+        margin: 4px;
+    }
+    
+}
+
+/* Стили для touch-устройств */
+.touch-device {
+    /* Оптимизация музыкального плеера */
+    .music-controls {
+        max-width: 50%;
+    }
+    
+    .volume-slider,
+    .progress-slider {
+        height: 5px;
+    }
+    
+    .volume-slider::-webkit-slider-thumb,
+    .progress-slider::-webkit-slider-thumb {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* Отключение hover-эффектов */
+    .content a:hover,
+    .content .links img:hover,
+    .footer a:hover,
+    .play-pause-btn:hover {
+        transform: none !important;
+        filter: none !important;
+        text-shadow: none !important;
+    }
+}
+
+/* Отключение кастомного курсора на touch-устройствах */
+.touch-device .cursor,
+.touch-device .cursor-trail,
+.touch-device .cursor-flash,
+.touch-device .cursor-splash {
+    display: none !important;
+}
+
+.touch-device * {
+    cursor: default !important;
+}
+
+
+video {
+    -webkit-transform: translateZ(0);
 }
