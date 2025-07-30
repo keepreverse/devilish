@@ -179,6 +179,7 @@ p.nickname {
     align-items: center;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 15px;
+    backdrop-filter: blur(3px);
     padding: 20px;
     box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
     min-width: 250px;
@@ -332,17 +333,20 @@ input:focus-visible,
     border-radius: 2px;
 }
 
+/* Обновленные стили для .music-container */
 .music-container {
-    position: fixed; /* Фиксированное позиционирование */
-    left: 50%;      /* Центрирование по горизонтали */
-    transform: translateX(-50%); /* Точное выравнивание */
-    top: 60px;   /* Отступ от нижнего края */
-    text-align: center;
-    z-index: 100;
-    width: 100%;
+    position: fixed;
+    top: 10vh;
+    width: auto; /* Изменено с 100% на auto */
     max-width: 500px;
-    padding: 0 20px; /* Защитные отступы по бокам */
+    z-index: 100;
+    text-align: center;
+    padding: 0 20px;
     box-sizing: border-box;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    display: inline-block; /* Добавлено для правильного центрирования */
 }
 
 .music-prompt {
@@ -356,17 +360,6 @@ input:focus-visible,
     padding: 10px 0; /* Внутренние отступы вместо margin */
 }
 
-/* Адаптация для мобильных устройств */
-@media (max-width: 768px) {
-    .music-container {
-        max-width: 90vw;
-        bottom: 10px;
-    }
-    
-    .music-prompt {
-        font-size: 14px;
-    }
-}
 .levitating {
     display: inline-block;
     text-shadow: 0 0 10px rgba(255, 60, 60, 0.7);
@@ -393,15 +386,12 @@ input:focus-visible,
     background: rgba(0, 0, 0, 0.3);
     padding: 10px 20px;
     border-radius: 30px;
-    margin: 0 auto;
     width: 100%;
     max-width: 200px;
-
     box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
     backdrop-filter: blur(2px);
     border: 2px solid rgba(255, 0, 0, 0.2);
     animation: controlsGlow 4s infinite ease-in-out;
-
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -487,7 +477,7 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
 }
 
 .volume-slider {
-    width: 100px;
+    width: 100%;
     -webkit-appearance: none;
     height: 3px;
     background: rgba(255, 85, 85, 0.3);
@@ -710,13 +700,13 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     }
 
     .header img {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
     }
 
     .name h1 {
-        font-size: 32px;
-        margin-bottom: 8px;
+        font-size: 26px;
+        margin-bottom: 6px;
     }
 
     .content .links {
@@ -724,17 +714,17 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     }
     
     .content .links img {
-        width: 28px;
-        margin: 5px;
+        width: 22px;
+        margin: 4px;
     }
 
     .music-container {
-        max-width: 85%;
-        bottom: 25px;
+        max-width: 90vw;
+        bottom: 10px;
     }
     
     .music-prompt {
-        font-size: 14px;
+        font-size: 16px;
     }
     
     /* Оптимизация анимаций */
@@ -770,8 +760,8 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     }
 
     .content .links img {
-        width: 28px;
-        margin: 5px;
+        width: 24px;
+        margin: 4px;
     }
     
     .music-container {
@@ -780,7 +770,7 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     }
     
     .music-prompt {
-        font-size: 12px;
+        font-size: 16px;
     }
     
     .music-controls {
@@ -806,13 +796,68 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     
 }
 
+
+/* Адаптация плеера для малой высоты экрана */
+@media (max-height: 560px) {
+    .music-container {
+        max-width: 280px;
+        top: 8vh;
+        width: auto; /* Сохраняем auto */
+        padding: 0 10px; /* Уменьшаем боковые отступы */
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+    .music-controls {
+        flex-direction: row !important;
+        align-items: center;
+        padding: 8px 15px;
+    }
+
+    .volume-slider {
+        display: none !important;
+    }
+
+    .controls-row {
+        margin-right: 10px;
+        margin-bottom: 0 !important;
+    }
+
+    .progress-container {
+        flex: 1;
+        min-width: 120px;
+        padding-bottom: 4px;
+    }
+
+    .time-display {
+        display: none;
+    }
+
+    .play-pause-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .progress-slider {
+        margin: 0;
+    }
+
+    .play-pause-btn.pause-icon::before {
+        width: 16px;
+        height: 14px;
+        border: none;
+        background: linear-gradient(to right, currentColor 0%, currentColor 30%, transparent 30%, transparent 70%, currentColor 70%, currentColor 100%),
+                    linear-gradient(to right, currentColor 0%, currentColor 30%, transparent 30%, transparent 70%, currentColor 70%, currentColor 100%);
+        background-size: 10px 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        transform: translate(-50%, -50%);
+    }
+}
+
 /* Стили для touch-устройств */
 .touch-device {
     /* Оптимизация музыкального плеера */
-    .music-controls {
-        max-width: 50%;
-    }
-    
     .volume-slider,
     .progress-slider {
         height: 5px;

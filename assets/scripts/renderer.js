@@ -41,9 +41,9 @@ const Renderer = {
 
   init: function() {
     if (isMobile) {
-      this.particles_per_second = 15;
-      this.particle_speed = 0.6;
-      this.particle_size = 8;
+      this.particles_per_second = 10;
+      this.particle_speed = 0.4;
+      this.particle_size = 6;
     }
     this.ctx = this.canvas.getContext("2d");
     this.resize();

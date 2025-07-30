@@ -1,5 +1,26 @@
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+function splashEffect(x, y) {
+  const splashCount = 10 + Math.floor(Math.random() * 5);
+  for (let i = 0; i < splashCount; i++) {
+    const drop = document.createElement('div');
+    drop.classList.add('cursor-splash');
+    drop.style.top = `${y}px`;
+    drop.style.left = `${x}px`;
+
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 40 + Math.random() * 20;
+    const offsetX = Math.cos(angle) * radius;
+    const offsetY = Math.sin(angle) * radius;
+
+    drop.style.setProperty('--x', `${offsetX}px`);
+    drop.style.setProperty('--y', `${offsetY}px`);
+
+    document.body.appendChild(drop);
+    setTimeout(() => drop.remove(), 600);
+  }
+}
+
 if (!isTouchDevice) {
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -11,8 +32,6 @@ if (!isTouchDevice) {
         cursor.classList.add('cursor');
 
         document.body.appendChild(cursor);
-
-
 
         // Исправленный метод проверки на кликабельные элементы
 
@@ -28,8 +47,6 @@ if (!isTouchDevice) {
 
         };
 
-
-
         function activateCursor(e) {
 
             if (!cursorActive) {
@@ -44,11 +61,7 @@ if (!isTouchDevice) {
 
         }
 
-
-
         let lastX = 0, lastY = 0;
-
-
 
         function moveCursor(e) {
 
@@ -61,7 +74,6 @@ if (!isTouchDevice) {
             cursor.style.top = `${y}px`;
 
             cursor.style.left = `${x}px`;
-
 
 
             // Анимированный трейл с рандомизацией
@@ -167,50 +179,6 @@ if (!isTouchDevice) {
         });
 
     });
-
-
-
-    function splashEffect(x, y) {
-
-        const splashCount = 10 + Math.floor(Math.random() * 5);
-
-
-
-        for (let i = 0; i < splashCount; i++) {
-
-            const drop = document.createElement('div');
-
-            drop.classList.add('cursor-splash');
-
-            drop.style.top = `${y}px`;
-
-            drop.style.left = `${x}px`;
-
-
-
-            const angle = Math.random() * Math.PI * 2;
-
-            const radius = 40 + Math.random() * 20;
-
-            const offsetX = Math.cos(angle) * radius;
-
-            const offsetY = Math.sin(angle) * radius;
-
-
-
-            drop.style.setProperty('--x', `${offsetX}px`);
-
-            drop.style.setProperty('--y', `${offsetY}px`);
-
-
-
-            document.body.appendChild(drop);
-
-            setTimeout(() => drop.remove(), 600);
-
-        }
-
-    }
 
 } else {
   document.addEventListener('touchstart', (e) => {
