@@ -270,7 +270,7 @@ p.nickname {
 }
 
 .content .links img {
-    filter: brightness(0) saturate(100%) invert(15%) sepia(100%) saturate(3500%) hue-rotate(-7deg) brightness(60%) contrast(110%) drop-shadow(0 0 4px #ff222270);
+    filter: brightness(0) invert(15%) sepia(100%) saturate(3500%) hue-rotate(0deg) brightness(60%) contrast(100%) drop-shadow(0 0 4px #ff222250);
     transition: filter 0.3s, transform 0.3s ease-out;
     will-change: transform;
     width: 30px;
@@ -284,7 +284,7 @@ p.nickname {
 }
 
 .content .links img:hover {
-    filter: brightness(0) saturate(100%) invert(15%) sepia(100%) saturate(3500%) hue-rotate(-7deg) brightness(80%) contrast(120%) drop-shadow(0 0 6px #ff2222bb);
+    filter: brightness(0) invert(15%) sepia(100%) saturate(3500%) hue-rotate(0deg) brightness(70%) contrast(120%) drop-shadow(0 0 6px #ff2222b5);
     transform: scale(1.1) translateY(-3px);
 }
 
@@ -415,7 +415,6 @@ input:focus-visible,
     align-items: center;
     justify-content: center;
     gap: 15px;
-    width: 100%;
 }
 
 .play-pause-btn {
@@ -855,8 +854,8 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     }
 }
 
-/* Стили для touch-устройств */
-.touch-device {
+/* Современный способ определения touch-устройств */
+@media (hover: none) and (pointer: coarse) {
     /* Оптимизация музыкального плеера */
     .volume-slider,
     .progress-slider {
@@ -874,25 +873,26 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     .content .links img:hover,
     .footer a:hover,
     .play-pause-btn:hover {
-        transform: none !important;
-        filter: none !important;
-        text-shadow: none !important;
+        transform: none;
+        filter: none;
+        text-shadow: none;
+    }
+    
+    /* Отключение кастомного курсора */
+    .cursor,
+    .cursor-trail,
+    .cursor-flash,
+    .cursor-splash {
+        display: none;
+    }
+    
+    * {
+        cursor: default;
     }
 }
 
-/* Отключение кастомного курсора на touch-устройствах */
-.touch-device .cursor,
-.touch-device .cursor-trail,
-.touch-device .cursor-flash,
-.touch-device .cursor-splash {
-    display: none !important;
-}
-
-.touch-device * {
-    cursor: default !important;
-}
-
-
+/* Фикс для рендеринга видео на iOS */
 video {
     -webkit-transform: translateZ(0);
+    transform: translateZ(0); /* Добавлено стандартное свойство */
 }
