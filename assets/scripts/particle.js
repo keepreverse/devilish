@@ -1,6 +1,6 @@
 class Particle {
 
-  constructor(x, y, size, speed, jitter, lifetime, hue_range) {
+  constructor(x, y, size, speed, jitter, lifetime, hue_range, saturation = 80) {
 
     this.i = 0;
 
@@ -9,6 +9,7 @@ class Particle {
     this.y = y;
 
     this.hue = Math.floor(Math.random() * (hue_range.to - hue_range.from) + hue_range.from);
+    this.saturation = saturation; // Добавляем насыщенность
 
     this.velx = speed;
 
@@ -30,7 +31,12 @@ class Particle {
 
   }
 
-
+  // Обновляем этот метод в классе Particle:
+  updateHue(newRange, newSaturation = 80) {
+    // Генерируем новый цвет в новом диапазоне
+    this.hue = Math.floor(Math.random() * (newRange.to - newRange.from) + newRange.from);
+    this.saturation = newSaturation; // Обновляем насыщенность
+  }
 
   animate(dt, mx, my, sw, sh) {
     this.i += dt;
@@ -44,7 +50,6 @@ class Particle {
     this.y += dt * ((my - sh / 2) * this.vely) * 
       (this.size - this.max_size / 2) * mobileFactor;
   }
-
 
   draw(c) {
 
@@ -62,11 +67,8 @@ class Particle {
 
     }
 
-
-
-    let color = `hsla(${this.hue}, 100%, 50%, ${transparency})`;
-
-
+    // Обновляем цвет с учетом насыщенности
+    let color = `hsla(${this.hue}, ${this.saturation}%, 50%, ${transparency})`;
 
     c.beginPath();
 
@@ -82,8 +84,6 @@ class Particle {
 
   }
 
-
-
   draw_info(c) {
 
     c.beginPath();
@@ -98,15 +98,11 @@ class Particle {
 
     c.closePath();
 
-
-
     c.font = "7px monospace";
 
     let info = `${this.size.toFixed(2)} ${this.draw_shape.name}`;
 
     c.strokeText(info, this.x - this.max_size, this.y + this.max_size * 2 + 2); 
-
-
 
     c.beginPath();
 
@@ -141,8 +137,6 @@ class Particle {
     c.closePath();
 
   }
-
-
 
   is_alive() {
 

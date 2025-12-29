@@ -44,7 +44,7 @@ body {
     height: 100%;
     object-fit: cover;
     z-index: -3;
-    filter: brightness(1.3) contrast(0.9) saturate(0.9) blur(4px);
+    filter: saturate(0.9) blur(5px);
     display: none;
 }
 
@@ -80,7 +80,7 @@ body::after {
     background-size: 100px 100px;
     animation: particles 15s infinite linear;
     z-index: -1;
-    opacity: 0.5;
+    opacity: 0.3;
 }
 
 @keyframes particles {
@@ -272,10 +272,8 @@ p.nickname {
 .content .links img {
     filter: brightness(0) invert(15%) sepia(100%) saturate(3500%) hue-rotate(0deg) brightness(60%) contrast(100%) drop-shadow(0 0 4px #ff222250);
     transition: filter 0.3s, transform 0.3s ease-out;
-    will-change: transform;
     width: 30px;
     margin: 0 8px;
-    transform: translateY(0);
 }
 
 @keyframes floatIcons {
@@ -283,7 +281,7 @@ p.nickname {
     50% { transform: translateY(-5px); }
 }
 
-.content .links img:hover {
+.icon-float:hover {
     filter: brightness(0) invert(15%) sepia(100%) saturate(3500%) hue-rotate(0deg) brightness(70%) contrast(120%) drop-shadow(0 0 6px #ff2222b5);
     transform: scale(1.1) translateY(-3px);
 }
@@ -674,7 +672,6 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
 
 
 /* Медиа-запросы для адаптивности */
-/* Медиа-запросы для адаптивности */
 @media (max-width: 1024px) {
     .container {
         transform: translate(-50%, -50%) scale(0.9);
@@ -686,9 +683,6 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
         gap: 20px;
     }
 
-    .music-container {
-        bottom: 30px;
-    }
 }
 
 @media (max-width: 768px) {
@@ -719,7 +713,6 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
 
     .music-container {
         max-width: 90vw;
-        bottom: 10px;
     }
     
     .music-prompt {
@@ -764,8 +757,7 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     }
     
     .music-container {
-        max-width: 90%;
-        bottom: 20px;
+        max-width: 80vw;
     }
     
     .music-prompt {
@@ -794,7 +786,6 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     }
     
 }
-
 
 /* Адаптация плеера для малой высоты экрана */
 @media (max-height: 560px) {
@@ -870,7 +861,6 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     
     /* Отключение hover-эффектов */
     .content a:hover,
-    .content .links img:hover,
     .footer a:hover,
     .play-pause-btn:hover {
         transform: none;
@@ -891,8 +881,610 @@ _::-webkit-full-page-media, _:future, :root .play-pause-btn {
     }
 }
 
+.icon-float {
+    display: inline-block;
+    will-change: transform;
+}
+
 /* Фикс для рендеринга видео на iOS */
 video {
     -webkit-transform: translateZ(0);
     transform: translateZ(0); /* Добавлено стандартное свойство */
 }
+
+
+
+
+
+
+
+
+
+
+
+/* Кнопка переключения реальности */
+.reality-switcher {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    text-align: center;
+}
+
+#reality-switch-btn {
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 0, 0, 0.2);
+    color: #ff5555;
+    padding: 10px 25px;
+    border-radius: 30px;
+    font-family: comfortaa-medium;
+    font-size: 16px;
+    backdrop-filter: blur(2px);
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.5s ease;
+    animation: controlsGlow 4s infinite ease-in-out;
+}
+
+#reality-switch-btn:hover {
+    background: rgba(0, 0, 0, 0.5);
+    color: #ff0000;
+    border-color: rgba(255, 0, 0, 0.5);
+    transform: scale(1.05);
+}
+
+/* Синяя тема */
+body.blue-theme {
+    background: linear-gradient(-45deg, #000010, #000000, #000010);
+}
+
+body.blue-theme::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: lavaMove 25s infinite alternate;
+    z-index: -1;
+}
+
+body.blue-theme::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(2px 2px at 20px 30px, #7a7cb8, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #7a7fd6, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, #8b8fd1, rgba(0,0,0,0));
+    background-size: 100px 100px;
+    animation: particles 15s infinite linear;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+/* Исправьте debug для синей темы */
+body.blue-theme .debug {
+    color: #2a8cff;
+    text-shadow: 0 0 5px #7a7cb8;
+}
+
+/* Исправьте loader для синей темы */
+body.blue-theme #loader::before {
+    border-top-color: #7a7cb8;
+    border-right-color: transparent;
+}
+
+body.blue-theme #loader::after {
+    border-top-color: #4a4f9c;
+    border-right-color: transparent;
+}
+
+/* Синий nickname - ТОЧНО КАК В КРАСНОЙ ТЕМЕ, ТОЛЬКО С СИНИМИ ЦВЕТАМИ */
+body.blue-theme p.nickname {
+    color: #575675;
+    animation: bluePulseText 2s infinite alternate;
+}
+
+@keyframes bluePulseText {
+    0% { 
+        text-shadow: 0 0 5px #9899cc;
+        opacity: 0.8;
+    }
+    100% { 
+        text-shadow: 0 0 10px #9899cc, 0 0 15px #9295bb;
+        opacity: 1;
+    }
+}
+
+/* Контейнер в синей теме */
+body.blue-theme .container {
+    box-shadow: 0 0 30px rgba(155, 158, 232, 0.25);
+}
+
+/* Изображение в хедере в синей теме с синей анимацией */
+body.blue-theme .header img {
+    border: 2px solid rgba(155, 158, 232, 0.2);
+    box-shadow: 0 0 10px rgba(155, 158, 232, 0.25);
+    animation: bluePulseImage 3s infinite alternate;
+}
+
+@keyframes bluePulseImage {
+    from { box-shadow: 0 0 5px rgba(155, 158, 232, 0.25); }
+    to { box-shadow: 0 0 15px rgba(155, 158, 232, 0.45); }
+}
+
+/* Синий заголовок с градиентом как в красной теме */
+body.blue-theme .name h1 {
+    background: linear-gradient(
+        -90deg,
+        #7a7cb8,
+        #4a4f9c,
+        #2f314f,
+        #4a4f9c,
+        #7a7cb8
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400% 100%;
+    animation: text-wave 8s ease-in-out infinite;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Ссылки в синей теме */
+body.blue-theme .content a {
+    color: #6f729b;
+}
+
+body.blue-theme .content a:hover {
+    color: #7a7cb8;
+}
+
+body.blue-theme .content .links img {
+    filter: brightness(0) invert(25%) sepia(130%) saturate(1800%) hue-rotate(230deg) brightness(50%) contrast(70%) drop-shadow(0 0 4px #8f92d650);
+}
+
+body.blue-theme .icon-float:hover {
+    filter: brightness(0) invert(25%) sepia(130%) saturate(1800%) hue-rotate(230deg) brightness(60%) contrast(70%) drop-shadow(0 0 6px #7a7cb8a5);
+    transform: scale(1.1) translateY(-3px);
+}
+
+/* Футер в синей теме */
+body.blue-theme .footer a {
+    color: #6f729b;
+    text-shadow: 0 0 5px #7a7cb8;
+}
+
+body.blue-theme .footer a:hover {
+    color: #7a7cb8;
+    text-shadow: 0 0 10px #7a7cb8;
+}
+
+/* Фокус в синей теме */
+body.blue-theme a:focus-visible,
+body.blue-theme button:focus-visible,
+body.blue-theme input:focus-visible,
+body.blue-theme [tabindex="0"]:focus-visible {
+    outline: 2px solid rgba(155, 158, 232, 0.5);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* Музыкальный плеер в синей теме */
+body.blue-theme .music-prompt {
+    color: #6f729b;
+}
+
+body.blue-theme .levitating {
+    text-shadow: 0 0 10px rgba(154, 160, 230, 0.6);
+    animation: levitate 2s ease-in-out infinite, blueGlow 2s ease-in-out infinite;
+}
+
+@keyframes blueGlow {
+    0%   { text-shadow: 0 0 10px rgba(155, 158, 232, 0.45); }
+    50%  { text-shadow: 0 0 24px rgba(102, 153, 255, 1); }
+    100% { text-shadow: 0 0 10px rgba(155, 158, 232, 0.45); }
+}
+
+body.blue-theme .music-controls {
+    box-shadow: 0 0 30px rgba(155, 158, 232, 0.25);
+    border: 2px solid rgba(155, 158, 232, 0.2);
+    animation: blueControlsGlow 4s infinite ease-in-out;
+}
+
+@keyframes blueControlsGlow {
+    0%, 100% { box-shadow: 0 0 30px rgba(155, 158, 232, 0.1); }
+    50% { box-shadow: 0 0 50px rgba(155, 158, 232, 0.2); }
+}
+
+body.blue-theme .play-pause-btn {
+    color: #6f729b;
+}
+
+body.blue-theme .play-pause-btn:hover {
+    color: #7a7cb8;
+}
+
+body.blue-theme .volume-slider {
+    background: rgba(155, 158, 232, 0.25);
+}
+
+body.blue-theme .volume-slider::-webkit-slider-thumb {
+    background: #6f729b;
+}
+
+body.blue-theme .volume-slider::-webkit-slider-thumb:hover {
+    background: #7a7cb8;
+}
+
+body.blue-theme .progress-slider {
+    background: rgba(155, 158, 232, 0.25);
+}
+
+body.blue-theme .progress-slider::-webkit-slider-thumb {
+    background: #6f729b;
+}
+
+body.blue-theme .progress-slider::-webkit-slider-thumb:hover {
+    background: #7a7cb8;
+}
+
+body.blue-theme .time-display {
+    color: #6f729b;
+}
+
+/* Кнопка переключения в синей теме */
+body.blue-theme #reality-switch-btn {
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(155, 158, 232, 0.2);
+    color: #6f729b;
+    box-shadow: 0 0 30px rgba(155, 158, 232, 0.25);
+    animation: blueControlsGlow 4s infinite ease-in-out;
+}
+
+body.blue-theme #reality-switch-btn:hover {
+    background: rgba(0, 0, 0, 0.5);
+    color: #7a7cb8;
+    border-color: rgba(155, 158, 232, 0.5);
+    transform: scale(1.05);
+}
+
+/* Синий курсор */
+body.blue-theme .cursor {
+    background: radial-gradient(circle, #7a7cb8, #2a2c46);
+    box-shadow:
+        0 0 10px rgba(155, 158, 232, 0.9),
+        0 0 25px rgba(155, 158, 232, 0.4),
+        inset 0 0 4px rgba(255, 255, 255, 0.3);
+    animation: blueCursorPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes blueCursorPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.3); }
+}
+
+body.blue-theme .cursor-trail {
+    background: radial-gradient(circle, rgba(155, 158, 232, 0.2), transparent);
+}
+
+body.blue-theme .cursor-flash {
+    background: radial-gradient(circle, rgba(155, 158, 232, 0.3), transparent);
+}
+
+body.blue-theme .cursor.clickable {
+    background: radial-gradient(circle, #000, #7a7cb8);
+    box-shadow:
+        0 0 12px rgba(0, 0, 0, 0.9),
+        0 0 25px rgba(155, 158, 232, 0.8),
+        inset 0 0 6px rgba(255, 255, 255, 0.1);
+    animation: blueClickablePulse 1s infinite alternate;
+}
+
+@keyframes blueClickablePulse {
+    from {
+        transform: translate(-50%, -50%) scale(1.2);
+        box-shadow:
+            0 0 8px rgba(155, 158, 232, 0.8),
+            0 0 18px rgba(0, 0, 0, 0.7);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1.4);
+        box-shadow:
+            0 0 16px rgba(155, 158, 232, 0.9),
+            0 0 30px rgba(0, 0, 0, 0.8);
+    }
+}
+
+body.blue-theme .cursor-splash {
+    background: radial-gradient(circle, #7a7cb8, #002244);
+}
+
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .reality-switcher {
+        bottom: 20px;
+    }
+    
+    #reality-switch-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .reality-switcher {
+        bottom: 15px;
+    }
+    
+    #reality-switch-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
+/* Улучшенная плавная анимация выхода */
+.horizontal-transition {
+    animation: smoothSlideOut 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
+    transition: none !important;
+    will-change: transform, opacity, filter;
+    z-index: 1000;
+}
+
+@keyframes smoothSlideOut {
+    0% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        filter: blur(0);
+        opacity: 1;
+    }
+    15% {
+        transform: translate(-90%, -50%) scale(0.95) rotate(-4deg);
+        filter: blur(2px);
+        opacity: 0.9;
+    }
+    40% {
+        transform: translate(-200%, -50%) scale(0.85) rotate(-8deg);
+        filter: blur(6px);
+        opacity: 0.7;
+    }
+    70% {
+        transform: translate(-350%, -50%) scale(0.65) rotate(-15deg);
+        filter: blur(12px);
+        opacity: 0.4;
+    }
+    100% {
+        transform: translate(-500%, -50%) scale(0.4) rotate(-25deg);
+        filter: blur(20px);
+        opacity: 0;
+    }
+}
+
+/* Плавная анимация входа */
+.blue-theme-enter {
+    animation: smoothSlideIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
+    opacity: 0;
+    will-change: transform, opacity, filter;
+    z-index: 1000;
+}
+
+@keyframes smoothSlideIn {
+    0% {
+        transform: translate(500%, -50%) scale(0.4) rotate(25deg);
+        filter: blur(20px);
+        opacity: 0;
+    }
+    30% {
+        transform: translate(350%, -50%) scale(0.65) rotate(15deg);
+        filter: blur(12px);
+        opacity: 0.4;
+    }
+    60% {
+        transform: translate(200%, -50%) scale(0.85) rotate(8deg);
+        filter: blur(6px);
+        opacity: 0.7;
+    }
+    85% {
+        transform: translate(90%, -50%) scale(0.95) rotate(4deg);
+        filter: blur(2px);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+/* Альтернативная резкая анимация */
+@keyframes sharpSlideOut {
+    0% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+    40% {
+        transform: translate(-200%, -50%) scale(0.7) rotate(-10deg);
+        opacity: 0.8;
+    }
+    80% {
+        transform: translate(-450%, -50%) scale(0.3) rotate(-20deg);
+        opacity: 0.2;
+    }
+    100% {
+        transform: translate(-600%, -50%) scale(0.1) rotate(-25deg);
+        opacity: 0;
+    }
+}
+
+@keyframes sharpSlideIn {
+    0% {
+        transform: translate(600%, -50%) scale(0.1) rotate(25deg);
+        opacity: 0;
+    }
+    40% {
+        transform: translate(450%, -50%) scale(0.3) rotate(20deg);
+        opacity: 0.2;
+    }
+    80% {
+        transform: translate(200%, -50%) scale(0.7) rotate(10deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* Отключение стандартных transition для анимации */
+.container.horizontal-transition,
+.container.blue-theme-enter {
+    transition: none !important;
+}
+
+/* Плавные переходы для смены темы - УБРАТЬ !important из старого правила */
+body,
+body::before,
+body::after,
+.container,
+.header img,
+.music-controls,
+#reality-switch-btn,
+.content a,
+.footer a,
+.cursor,
+.cursor-trail,
+.cursor-flash,
+.cursor-splash {
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Переходы только для цветов (не для transform/opacity) */
+.container {
+    transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Для body переходы цветов фона */
+body {
+    transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Для текста и других элементов */
+.content a,
+.footer a,
+.name h1,
+p.nickname,
+.music-prompt,
+.play-pause-btn,
+.time-display {
+    transition: color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                text-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Для изображений иконок */
+.content .links img {
+    transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s ease-out;
+}
+
+/* Для курсора */
+.cursor,
+.cursor-trail,
+.cursor-flash,
+.cursor-splash {
+    transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Переходной оверлей */
+.transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Анимация дождя */
+@keyframes rainFallEnhanced {
+    0% {
+        transform: translate(0, 0) rotate(var(--angle, 45deg));
+        opacity: 0;
+    }
+    10% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.95;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    70% {
+        opacity: 0.4;
+    }
+    85% {
+        opacity: 0.1;
+    }
+    100% {
+        transform: translate(
+            calc(var(--end-x) - var(--start-x)),
+            calc(var(--end-y) - var(--start-y))
+        ) rotate(var(--angle, 45deg));
+        opacity: 0;
+    }
+}
+
+
+/* Стили для капель дождя */
+.rain-drop {
+    position: absolute !important;
+    will-change: transform, opacity;
+    transform-origin: center;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* Плавный easing */
+}
+
+/* Обновим transition для плавной смены цвета */
+body,
+body::before,
+body::after {
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.container,
+.header img,
+.music-controls,
+#reality-switch-btn,
+.content a,
+.footer a {
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Видео должно плавно менять filter */
+#background-video {
+    transition: filter 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Для контейнера отдельные transition */
+.container {
+    transition: 
+        background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Отключение transition для анимации карусели */
+.container.horizontal-transition,
+.container.blue-theme-enter {
+    transition: none !important;
+}
+

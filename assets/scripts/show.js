@@ -73,7 +73,7 @@ setTimeout(hidePreloader, maxLoadTime);
 // Парящая анимация для иконок
 // (реализация по предложению пользователя)
 document.addEventListener('DOMContentLoaded', () => {
-    const icons = document.querySelectorAll('.content .links img');
+    const icons = document.querySelectorAll('.icon-float');
     const amplitude = 5; // px
     const period = 4000; // ms
     const scaleHover = 1.1;

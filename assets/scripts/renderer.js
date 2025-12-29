@@ -8,12 +8,13 @@ const Renderer = {
   animate_particles: true,
   disable_drawing: false,
   
-  particles_per_second: 40,
+  particles_per_second: 30,
   particle_lifetime: 2,
   particle_speed: .2,
   particle_jitter: .1,
   particle_size: 10,
   hue_range: { from: 0, to: 15 },
+  particle_saturation: 80, // Добавляем насыщенность по умолчанию
   
   // Для плавного FPS
   fps_samples: [],
@@ -26,8 +27,7 @@ const Renderer = {
   canvas: document.getElementById("canvas-background"),
   ctx: null,
   particles: [],
-  mouse: { x: window.innerWidth / 2, y: window.innerHeight / 2 }, // Центр экрана по умолчанию
-
+  mouse: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
 
   touchstart: function(e) {
     this.mouse.x = e.touches[0].clientX;
@@ -41,14 +41,13 @@ const Renderer = {
 
   init: function() {
     if (isMobile) {
-      this.particles_per_second = 10;
+      this.particles_per_second = 8;
       this.particle_speed = 0.4;
-      this.particle_size = 6;
+      this.particle_size = 5;
     }
     this.ctx = this.canvas.getContext("2d");
     this.resize();
     
-    // Инициализируем позицию мыши снова после ресайза
     this.mouse = {
       x: this.canvas.width / 2,
       y: this.canvas.height / 2
@@ -63,6 +62,12 @@ const Renderer = {
     document.addEventListener('touchmove', this.touchmove.bind(this));
    
     this.main();
+    
+    // Применяем сохраненную тему сразу после инициализации
+    this.applySavedTheme();
+    
+    // Уведомляем, что Renderer готов
+    window.dispatchEvent(new CustomEvent('rendererReady'));
   },
   
   main: function() {
@@ -76,7 +81,6 @@ const Renderer = {
   resize: function() {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
-    // Обновляем позицию мыши при ресайзе
     this.mouse = {
       x: this.canvas.width / 2,
       y: this.canvas.height / 2
@@ -188,9 +192,33 @@ const Renderer = {
       this.particle_speed, 
       this.particle_jitter, 
       this.particle_lifetime,
-      this.hue_range
+      this.hue_range,
+      this.particle_saturation // Передаем насыщенность
     ));
+  },
+
+  updateParticleHueRange: function(newRange, newSaturation = 80) {
+    // Обновляем диапазон для новых частиц
+    this.hue_range = newRange;
+    this.particle_saturation = newSaturation; // Обновляем насыщенность
+    
+    // Обновляем цвет существующих частиц
+    for (let i = 0; i < this.particles.length; i++) {
+      if (this.particles[i].updateHue) {
+        this.particles[i].updateHue(newRange, newSaturation);
+      }
+    }
+  },
+
+  applySavedTheme: function() {
+    const savedTheme = localStorage.getItem('preferredTheme');
+    if (savedTheme === 'blue') {
+      this.updateParticleHueRange({ from: 240, to: 250 }, 30); // 30% насыщенность для синих
+    }
   }
 };
+
+// Делаем Renderer доступным глобально
+window.Renderer = Renderer;
 
 document.addEventListener('DOMContentLoaded', () => Renderer.init());

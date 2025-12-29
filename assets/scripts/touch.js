@@ -17,12 +17,17 @@ function handleDragStart(e) {
   return false;
 }
 
-// Обновим функцию для мобильных
+function isInteractiveTarget(e) {
+  return e.target.closest('a, button, input, textarea, select');
+}
+
 function handleMiddleClick(e) {
+  if (isInteractiveTarget(e)) return;
   if (e.button === 1 || e.touches?.length > 1) {
     e.preventDefault();
   }
 }
+
 
 // Установка обработчиков событий
 function setupEventHandlers() {
@@ -30,7 +35,6 @@ function setupEventHandlers() {
   document.addEventListener('contextmenu', handleContextMenu);
   document.addEventListener('dragstart', handleDragStart);
   document.addEventListener('auxclick', handleMiddleClick); // auxclick - для средней кнопки мыши
-  document.addEventListener('mousedown', handleMiddleClick); // Дополнительная проверка
   
   // Для полной совместимости
   document.oncontextmenu = function() { return false; };

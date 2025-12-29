@@ -9,8 +9,31 @@ if (isIOS) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const music = new Audio('assets/music/hp.mp3');
+
+    /* ================================
+       ВОССТАНОВЛЕНИЕ СОСТОЯНИЯ И ТЕМЫ
+    ================================= */
+
+    const savedMedia = JSON.parse(localStorage.getItem('mediaState') || '{}');
+    const savedTheme = savedMedia.theme === 'blue';
+
+    const isBlueTheme =
+        typeof savedTheme === 'boolean'
+            ? savedTheme
+            : document.body.classList.contains('blue-theme');
+
+    const audioSrc = isBlueTheme
+        ? 'assets/music/db.mp3'
+        : 'assets/music/hp.mp3';
+
+    const videoSrc = isBlueTheme
+        ? 'assets/music/db.mp4'
+        : 'assets/music/hp.mp4';
+
+    const music = new Audio(audioSrc);
     const video = document.getElementById('background-video');
+    video.src = videoSrc;
+
     const prompt = document.getElementById('music-prompt');
     const controls = document.getElementById('music-controls');
     const playPauseBtn = document.getElementById('play-pause-btn');
@@ -21,12 +44,91 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let isPlaying = false;
     let isSeeking = false;
-    let videoPlayPromise = null;  // для предотвращения конфликтов play()
+    let videoPlayPromise = null;
 
     music.loop = true;
     music.volume = 0.3;
     video.muted = true;
-    video.loop = false; // отключаем loop
+    video.loop = false;
+
+    /* ================================
+       СОХРАНЕНИЕ СОСТОЯНИЯ
+    ================================= */
+
+    function saveMediaState() {
+        localStorage.setItem('mediaState', JSON.stringify({
+            theme: document.body.classList.contains('blue-theme') ? 'blue' : 'red',
+            time: music.currentTime || 0,
+            playing: !music.paused
+        }));
+    }
+
+    music.addEventListener('pause', saveMediaState);
+    music.addEventListener('play', saveMediaState);
+    window.addEventListener('beforeunload', saveMediaState);
+
+    /* ================================
+       СМЕНА ТЕМЫ (вызывается извне)
+    ================================= */
+
+    window.changeMediaTheme = function(isBlue) {
+        const wasPlaying = !music.paused;
+        const currentTime = music.currentTime || 0;
+
+        music.pause();
+        video.pause();
+        videoPlayPromise = null;
+
+        const newAudioSrc = isBlue
+            ? 'assets/music/db.mp3'
+            : 'assets/music/hp.mp3';
+
+        const newVideoSrc = isBlue
+            ? 'assets/music/db.mp4'
+            : 'assets/music/hp.mp4';
+
+        music.src = newAudioSrc;
+        video.src = newVideoSrc;
+        video.load();
+
+        music.currentTime = currentTime;
+        video.currentTime = currentTime;
+
+        if (wasPlaying) {
+            music.play().then(() => {
+                video.play().catch(() => {});
+            }).catch(() => {});
+        }
+
+        saveMediaState();
+
+        music.addEventListener('loadedmetadata', () => {
+            durationDisplay.textContent = formatTime(music.duration);
+        }, { once: true });
+    };
+
+    /* ================================
+       ВОССТАНОВЛЕНИЕ ПОСЛЕ ЗАГРУЗКИ
+    ================================= */
+
+    music.addEventListener('loadedmetadata', () => {
+        if (savedMedia.time) {
+            music.currentTime = savedMedia.time;
+            video.currentTime = savedMedia.time;
+        }
+
+        if (savedMedia.playing) {
+            music.play().then(() => {
+                video.play().catch(() => {});
+            }).catch(() => {});
+        }
+
+        durationDisplay.textContent = formatTime(music.duration);
+    }, { once: true });
+
+    /* ================================
+       УТИЛИТЫ
+    ================================= */
 
     function formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
@@ -56,17 +158,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 videoPlayPromise = null;
             }
         } else {
-            if (video.paused && !video.seeking) {
-                // Если уже пытаемся играть — не вызываем повторно
-                if (!videoPlayPromise) {
-                    videoPlayPromise = video.play()
-                        .catch(e => {
-                            videoPlayPromise = null;
-                        })
-                        .then(() => {
-                            videoPlayPromise = null;
-                        });
-                }
+            if (video.paused && !video.seeking && !videoPlayPromise) {
+                videoPlayPromise = video.play()
+                    .catch(() => {})
+                    .finally(() => {
+                        videoPlayPromise = null;
+                    });
             }
         }
     }
@@ -74,24 +171,21 @@ document.addEventListener('DOMContentLoaded', function () {
     function showAndPlayMedia() {
         video.style.display = 'block';
 
-        music.play()
-            .then(() => {
-                video.currentTime = music.currentTime;
-                if (!videoPlayPromise) {
-                    videoPlayPromise = video.play()
-                        .catch(e => {
-                            console.error('Ошибка воспроизведения видео:', e);
-                            videoPlayPromise = null;
-                        })
-                        .then(() => {
-                            videoPlayPromise = null;
-                        });
-                }
-            })
-            .catch(e => {
-                console.error('Ошибка воспроизведения аудио:', e);
-            });
+        music.play().then(() => {
+            video.currentTime = music.currentTime;
+            if (!videoPlayPromise) {
+                videoPlayPromise = video.play()
+                    .catch(() => {})
+                    .finally(() => {
+                        videoPlayPromise = null;
+                    });
+            }
+        }).catch(() => {});
     }
+
+    /* ================================
+       UI СОБЫТИЯ
+    ================================= */
 
     prompt.addEventListener('click', function () {
         prompt.style.display = 'none';
@@ -108,18 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     playPauseBtn.addEventListener('click', function () {
         if (music.paused) {
-            music.play()
-                .then(() => {
-                    playPauseBtn.classList.remove('play-icon');
-                    playPauseBtn.classList.add('pause-icon');
-
-                    if (durationDisplay.textContent === '0:00') {
-                        durationDisplay.textContent = formatTime(music.duration);
-                    }
-
-                    syncMedia();
-                })
-                .catch(e => console.error('Ошибка воспроизведения аудио:', e));
+            music.play().catch(() => {});
         } else {
             music.pause();
             video.pause();
@@ -141,8 +224,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const seekTime = (this.value / 100) * music.duration;
         music.currentTime = seekTime;
         video.currentTime = seekTime;
-        // isSeeking сбросится в video.seeked
     });
+
+    /* ================================
+       MEDIA EVENTS
+    ================================= */
 
     music.addEventListener('timeupdate', () => {
         updateProgress();
@@ -164,33 +250,25 @@ document.addEventListener('DOMContentLoaded', function () {
         videoPlayPromise = null;
     });
 
-    // Инициализация при загрузке
-    playPauseBtn.classList.add('play-icon');
-
-    music.addEventListener('loadedmetadata', () => {
-        durationDisplay.textContent = formatTime(music.duration);
-    });
-
     music.addEventListener('ended', () => {
         progressSlider.value = 0;
         currentTimeDisplay.textContent = '0:00';
         video.currentTime = 0;
     });
 
-    music.addEventListener('error', (e) => {
-        console.error('Ошибка аудио:', e);
+    music.addEventListener('error', () => {
         controls.style.display = 'flex';
-        playPauseBtn.classList.remove('play-icon', 'pause-icon');
         playPauseBtn.textContent = '❌';
         playPauseBtn.style.color = '#ff0000';
     });
 
-    video.addEventListener('error', (e) => {
-        console.error('Ошибка видео:', e);
+    video.addEventListener('error', () => {
         video.style.display = 'none';
     });
 
     video.addEventListener('seeked', () => {
         isSeeking = false;
     });
+
+    playPauseBtn.classList.add('play-icon');
 });

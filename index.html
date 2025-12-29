@@ -85,13 +85,13 @@
     </div>
 
     <main class="container">
-      <header class="header">
-        <img src="assets/images/pic.png" alt="Profile picture" />
-        <div class="name">
-          <h1>reversE</h1>
-          <p class="nickname">workin' on dying</p>
-        </div>
-      </header>
+		<header class="header">
+			<img src="assets/images/pic_a.png" alt="Profile picture" id="profile-image">
+			<div class="name">
+				<h1>reversE</h1>
+				<p class="nickname">workin' on dying</p>
+			</div>
+		</header>
 
       <section class="content" aria-label="Social links">
         <div class="links">
@@ -100,51 +100,57 @@
             target="_blank"
             rel="noopener noreferrer"
             aria-label="YouTube"
-            ><img src="assets/images/icons/youtube.png" alt="YouTube icon"
-          /></a>
+            ><span class="icon-float"><img src="assets/images/icons/youtube.png" alt="YouTube icon"
+          /></span></a>
           <a
             href="https://steamcommunity.com/profiles/76561198441411688"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Steam"
-            ><img src="assets/images/icons/steam.png" alt="Steam icon"
-          /></a>
+            ><span class="icon-float"><img src="assets/images/icons/steam.png" alt="Steam icon"
+          /></span></a>
           <a
             href="https://github.com/keepreverse"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            ><img src="assets/images/icons/github.png" alt="GitHub icon"
-          /></a>
+            ><span class="icon-float"><img src="assets/images/icons/github.png" alt="GitHub icon"
+          /></span></a>
           <a
             href="https://open.spotify.com/user/wj9qgsy81spwoykpycxt281ca?si=f78c454a54a24ae0"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Spotify"
-            ><img src="assets/images/icons/spotify.png" alt="Spotify icon"
-          /></a>
+            ><span class="icon-float"><img src="assets/images/icons/spotify.png" alt="Spotify icon"
+          /></span></a>
           <a
             href="https://discordapp.com/users/355762117951094784"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Discord"
-            ><img src="assets/images/icons/discord.png" alt="Discord icon"
-          /></a>
+            ><span class="icon-float"><img src="assets/images/icons/discord.png" alt="Discord icon"
+          /></span></a>
         </div>
       </section>
     </main>
 
+	<!-- Вставьте этот код перед закрывающим </body> -->
+	<div class="reality-switcher">
+		<button id="reality-switch-btn" aria-label="Switch reality">switch reality</button>
+	</div>
+
     <!-- Скрипты без версии -->
     <script src="assets/scripts/pointer.js"></script>
-    <script src="assets/scripts/show.js"></script>
     <script src="assets/scripts/touch.js"></script>
+	<script src="assets/scripts/show.js"></script>
     <script src="assets/scripts/track.js"></script>
-    <script src="assets/scripts/player.js"></script>
     <script src="assets/scripts/shapes.js"></script>
     <script src="assets/scripts/particle.js"></script>
     <script src="assets/scripts/renderer.js"></script>
+    <script src="assets/scripts/theme-switcher.js"></script>
     <script src="assets/scripts/events.js"></script>
     <script src="assets/scripts/focus.js"></script>
+    <script src="assets/scripts/player.js"></script>	
 
     <!-- Автоматическое добавление версии для сброса кеша -->
     <script>
